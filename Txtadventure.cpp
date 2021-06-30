@@ -2,6 +2,8 @@
 #include <string>
 #include <Windows.h>
 #include <stdlib.h>
+#include <fstream>
+#include <vector>
 
 using namespace std;
 
@@ -9,8 +11,9 @@ int levelud = 0;
 int levellr = 0;
 string direction;
 string credits = "Thanks for playing the game ";
-string credits2 = " This game was coded by Luc Stolk.\nWith some help from Liam de Koning and Tim Leijten aka (suss). \nThe story was written by Luc Stolk. I hope you enjoyed it ";
+// string credits2 = " This game was coded by Luc Stolk.\nWith some help from Liam de Koning and Tim Leijten aka (suss). \nThe story was written by Luc Stolk. I hope you enjoyed it ";
 string playername;						// playername save
+string positionload;
 
 void slowSentence(string sentence) {
 	for (int i = 0; i < sentence.length(); i++) {
@@ -38,7 +41,34 @@ void Credits() {
 	system("CLS");
 	slowSentence(credits);
 	slowSentence(playername);
-	slowSentence(credits2);
+	//slowSentence(credits2);
+}
+
+void Save() {
+	ofstream myfile ("save.txt");
+	if (myfile.is_open()) {
+		cout << "save file is open";
+		myfile << levelud << "\n";
+		myfile << levellr << "\n";
+	}
+	else {
+		cout << "save file not found";
+	}
+	myfile.close();
+	
+}
+void Load() {
+	ifstream myfile("save.txt");
+	if (myfile.is_open()) {
+		cout << "save file is open";
+		while (getline(myfile, positionload))
+		myfile >> positionload;
+		cout << positionload;
+	}
+	else {
+		cout << "save file not found";
+	}
+	myfile.close();
 }
 
 
@@ -54,7 +84,7 @@ int main() {
 	string chooseadirection = "\nNow choose a direction you want to go. North, East, South, West ";
 	string hitawall = "You hit a wall Bonkers ";
 	string herasmussendsyouback = "Hello adventurer. you already have been here and there is nothing important for you left here";
-	string welcome = "Welcome to this Text adventure game. Please tell me your name.\n";
+	string welcome = "Welcome to this Text adventure game. Please tell me your name. Or if your returning use Load. \n";
 	string welcomeplayer1 = "Welcome ";
 	string welcomeplayer2 = " to the wonderful world of Athernos.";
 	string gender1 = "\nNow tell me are you a boy or a girl. \n";
@@ -64,26 +94,31 @@ int main() {
 	string introvillage = "Welcome to Starter village you hear as you walk through the gate. My name is Alisha and i am the daughter of the mayor. What is your name : ";
 	string introvillage2 = ". Weird i remember that name vaguely, like i have heard it before. Anyway what does a adventurer like you do in Starter village. I bet you want to meet the mayor luckily he is not busy right now. I'll lead you to him.\nShe starts to walk towards the North.";
 	string introvillage3 = "You follow Alisha to the north. After a moment you see a big building with marble pillars. She leads you inside into a office. Inside the office sits a man with a curly mustache. As you look at him you see he is about 1.8m you also see his mustache is getting a little white. As he sits there you hear Alisha say that you are a new adventurer. ";
-	string introvillage4 = "mt";
+	string introvillage4 = "A new adventurer you say. Perfect we are in need of help. But before i sent you off i want to see what you are capable off";
 	// Welcoming sequence with character selection
 		
 	slowSentence(welcome);
-	std::cin >> playername;
+	cin >> playername;
+	if (playername == "Load" || playername == "load" || playername == "L" || playername == "l") {
+		Load();
+	}
 	slowSentence(welcomeplayer1);
 	slowSentence(playername);
 	slowSentence(welcomeplayer2);
 	for (int i = 0; i < 100; i++) {
 		slowSentence(gender1);
 		std::cin >> gender;
-		slowSentence(gender2);
-		slowSentence(gender);
-		slowSentence(gender3);
-		std::cin >> confirmgender;
-		if (confirmgender == "yes" || confirmgender == "Yes") {
-			break;
-		}
-		else if (confirmgender == "no" || confirmgender == "No") {
-			cout << " So you are not a " << gender;
+		if (gender == "boy" || gender == "Boy" || gender == "girl" || gender == "Girl") {
+			slowSentence(gender2);
+			slowSentence(gender);
+			slowSentence(gender3);
+			std::cin >> confirmgender;
+			if (confirmgender == "yes" || confirmgender == "Yes") {
+				break;
+			}
+			else if (confirmgender == "no" || confirmgender == "No") {
+				cout << " So you are not a " << gender;
+			}
 		}
 	}
 
@@ -113,6 +148,7 @@ int main() {
 	}
 	slowSentence(playername);
 	slowSentence(introvillage2);
+	Save();
 	for (int i = 0; i < 100; i++) {
 		slowSentence(chooseadirection);
 		cin >> direction;
@@ -136,9 +172,9 @@ int main() {
 	}
 
 	slowSentence(introvillage4);
-	/*
+	
 	// Credit sequence
-	Credits();*/
+	Credits();
 }
 
 
