@@ -7,8 +7,8 @@
 
 using namespace std;
 
-float levelud;
-float levellr;
+float levelud = 0;
+float levellr = 0;
 string direction;
 string exitgame = "The game will exit. Goodbye";
 string credits = "Thanks for playing the game ";
@@ -17,7 +17,9 @@ string saving = "Saving game do not altf4 ";
 string playername;						// playername save
 string positionload;					// loading gamesave
 string exitsave;						// making save on exit
-
+string player;							// playername in save file
+string gender;							// gender save
+string gendername;						// gendername in save file
 void slowSentence(string sentence) {
 	for (int i = 0; i < sentence.length(); i++) {
 		std::cout << sentence[i];
@@ -32,19 +34,34 @@ void Credits() {
 	//slowSentence(credits2);
 }
 
+
 void Save() {
 	vector<double> a = { levelud, levellr };
 	ofstream myfile ("save.txt");
-	ostream_iterator<double> output_iterator(myfile, "\n");
-	copy(a.begin(), a.end(), output_iterator);
 	if (myfile.is_open()) {
 		cout << "save file is open";
+		ostream_iterator<double> output_iterator(myfile, "\n");
+		copy(a.begin(), a.end(), output_iterator);
+		myfile.close();
 	}
 	else {
 		cout << "save file not found";
 	}
-	myfile.close();
-	
+	ofstream namefile("namesave.txt");
+	if (namefile.is_open()) {
+		cout << "namesave file is open";
+		namefile << playername;
+		namefile.close();
+	}
+	else {
+		cout << "file not found";
+	}
+	ofstream genderfile("gendersave.txt");
+	if (genderfile.is_open()) {
+		cout << "gendersave file is open";
+		genderfile << gender;
+		namefile.close();
+	}
 }
 
 void Exit() {
@@ -82,7 +99,6 @@ void MoveDirection() {
 		Exit();
 	}
 }
-
 void Load() {
 	vector<double> newVector;
 	ifstream myfile("save.txt");
@@ -95,21 +111,35 @@ void Load() {
 	{
 		cout << "save file is found";
 		cout << "\n ";
-		cout << tempVar;
+		if (newVector.size() > 1) {
+			cout << newVector[0] << endl << newVector[1] << endl;
+		}
+		myfile.close();
 	}
 	else
 	{
 		cout << "save file not found";
 	}
 	myfile.close();
-}
+	ifstream namefile("namesave.txt");
+	if (namefile.is_open()) {
+		while (getline(myfile, player)) {
+			istreambuf_iterator<char>(namefile);
+			cout << player;
+		}
+		namefile.close();
+	}
 
+	levelud = newVector[0];
+	levellr = newVector[1];
+	playername = player;
+	gender = gendername;
+
+}
 
 int main() {
 
 	// strings that are variable
-
-	string gender;							// gender save
 	string confirmgender;					// gender confirmation
 
 	// strings with text
@@ -129,31 +159,36 @@ int main() {
 	string introvillage3 = "You follow Alisha to the north. After a moment you see a big building with marble pillars. She leads you inside into a office. Inside the office sits a man with a curly mustache. As you look at him you see he is about 1.8m you also see his mustache is getting a little white. As he sits there you hear Alisha say that you are a new adventurer. ";
 	string introvillage4 = "A new adventurer you say. Perfect we are in need of help. But before i sent you off i want to see what you are capable off";
 	// Welcoming sequence with character selection
-		
+
 	slowSentence(welcome);
 	cin >> playername;
 	if (playername == "Load" || playername == "load" || playername == "L" || playername == "l") {
 		Load();
+		cout << "Welcome back " << playername;
 	}
-	slowSentence(welcomeplayer1);
-	slowSentence(playername);
-	slowSentence(welcomeplayer2);
-	for (int i = 0; i < 100; i++) {
-		slowSentence(gender1);
-		std::cin >> gender;
-		if (gender == "boy" || gender == "Boy" || gender == "girl" || gender == "Girl") {
-			slowSentence(gender2);
-			slowSentence(gender);
-			slowSentence(gender3);
-			std::cin >> confirmgender;
-			if (confirmgender == "yes" || confirmgender == "Yes") {
-				break;
-			}
-			else if (confirmgender == "no" || confirmgender == "No") {
-				cout << " So you are not a " << gender;
+	int i_levelud = levelud;
+	int i_levellr = levellr;
+	if (i_levelud == 0 && i_levellr == 0) {
+		slowSentence(welcomeplayer1);
+		slowSentence(playername);
+		slowSentence(welcomeplayer2);
+		for (int i = 0; i < 100; i++) {
+			slowSentence(gender1);
+			std::cin >> gender;
+			if (gender == "boy" || gender == "Boy" || gender == "girl" || gender == "Girl") {
+				slowSentence(gender2);
+				slowSentence(gender);
+				slowSentence(gender3);
+				std::cin >> confirmgender;
+				if (confirmgender == "yes" || confirmgender == "Yes") {
+					break;
+				}
+				else if (confirmgender == "no" || confirmgender == "No") {
+					cout << " So you are not a " << gender;
+				}
 			}
 		}
-	}
+	
 
 	// Intro sequence with first village
 
@@ -181,7 +216,7 @@ int main() {
 	}
 	slowSentence(playername);
 	slowSentence(introvillage2);
-	Save();
+	}
 	for (int i = 0; i < 100; i++) {
 		slowSentence(chooseadirection);
 		cin >> direction;
@@ -209,6 +244,3 @@ int main() {
 	// Credit sequence
 	Credits();
 }
-
-
-
