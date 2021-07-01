@@ -7,13 +7,16 @@
 
 using namespace std;
 
-int levelud = 0;
-int levellr = 0;
+int levelud = 1;
+int levellr = 1;
 string direction;
+string exitgame = "The game will exit. Goodbye";
 string credits = "Thanks for playing the game ";
+string saving = "Saving game do not altf4 ";
 // string credits2 = " This game was coded by Luc Stolk.\nWith some help from Liam de Koning and Tim Leijten aka (suss). \nThe story was written by Luc Stolk. I hope you enjoyed it ";
 string playername;						// playername save
-string positionload;
+string positionload;					// loading gamesave
+string exitsave;						// making save on exit
 
 void slowSentence(string sentence) {
 	for (int i = 0; i < sentence.length(); i++) {
@@ -22,7 +25,44 @@ void slowSentence(string sentence) {
 	}
 }
 
-void moveDirection() {
+void Credits() {
+	system("CLS");
+	slowSentence(credits);
+	slowSentence(playername);
+	//slowSentence(credits2);
+}
+
+void Save() {
+	vector<float> a = { levelud,levellr };
+	ofstream myfile ("save.txt");
+	ostream_iterator<float> output_iterator(myfile, "\n");
+	copy (a.begin(), a.end(), output_iterator )
+	if (myfile.is_open()) {
+		cout << "save file is open";
+	}
+	else {
+		cout << "save file not found";
+	}
+	myfile.close();
+	
+}
+
+void Exit() {
+	cout << "Before you leave do you want to save";
+	cin >> exitsave;
+	if (exitsave == "y" || exitsave == "Y" || exitsave == "Yes" || exitsave == "yes") {
+		slowSentence(saving);
+		Save();
+		slowSentence(exitgame);
+		exit (0);
+	}
+	else {
+		slowSentence(exitgame);
+		exit (0);
+	}
+}
+
+void MoveDirection() {
 	if (direction == "N" || direction == "North" || direction == "n" || direction == "north") {
 		levelud += 1;
 	}
@@ -35,37 +75,30 @@ void moveDirection() {
 	if (direction == "W" || direction == "West" || direction == "w" || direction == "west") {
 		levellr -= 1;
 	}
+	if (direction == "save" || direction == "Save") {
+		Save();
+	}
+	if (direction == "Exit" || direction == "exit") {
+		Exit();
+	}
 }
 
-void Credits() {
-	system("CLS");
-	slowSentence(credits);
-	slowSentence(playername);
-	//slowSentence(credits2);
-}
-
-void Save() {
-	ofstream myfile ("save.txt");
-	if (myfile.is_open()) {
-		cout << "save file is open";
-		myfile << levelud << "\n";
-		myfile << levellr << "\n";
-	}
-	else {
-		cout << "save file not found";
-	}
-	myfile.close();
-	
-}
 void Load() {
+	vector<float> randomVector;
 	ifstream myfile("save.txt");
-	if (myfile.is_open()) {
-		cout << "save file is open";
-		while (getline(myfile, positionload))
-		myfile >> positionload;
-		cout << positionload;
+	float tempVar;
+	while ("save.txt" >> tempVar)
+	{
+		randomVector.push_back(tempVar);
 	}
-	else {
+	if (myfile.is_open)
+	{
+		cout << "save file is found";
+		cout << "\n ";
+		cout << tempVar
+	}
+	else 
+	{
 		cout << "save file not found";
 	}
 	myfile.close();
@@ -128,7 +161,7 @@ int main() {
 	for (int i = 0; i < 100; i++) {
 		slowSentence(chooseadirection);
 		cin >> direction;
-		moveDirection();
+		MoveDirection();
 		if (levelud == 1) {
 			slowSentence(introvillage);
 			break;
@@ -152,7 +185,7 @@ int main() {
 	for (int i = 0; i < 100; i++) {
 		slowSentence(chooseadirection);
 		cin >> direction;
-		moveDirection();
+		MoveDirection();
 		if (levelud == 2) {
 			slowSentence(introvillage3);
 			break;
