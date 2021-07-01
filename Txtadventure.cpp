@@ -7,8 +7,8 @@
 
 using namespace std;
 
-int levelud = 1;
-int levellr = 1;
+float levelud;
+float levellr;
 string direction;
 string exitgame = "The game will exit. Goodbye";
 string credits = "Thanks for playing the game ";
@@ -33,10 +33,10 @@ void Credits() {
 }
 
 void Save() {
-	vector<float> a = { levelud,levellr };
+	vector<double> a = { levelud, levellr };
 	ofstream myfile ("save.txt");
-	ostream_iterator<float> output_iterator(myfile, "\n");
-	copy (a.begin(), a.end(), output_iterator )
+	ostream_iterator<double> output_iterator(myfile, "\n");
+	copy(a.begin(), a.end(), output_iterator);
 	if (myfile.is_open()) {
 		cout << "save file is open";
 	}
@@ -84,20 +84,20 @@ void MoveDirection() {
 }
 
 void Load() {
-	vector<float> randomVector;
+	vector<double> newVector;
 	ifstream myfile("save.txt");
-	float tempVar;
-	while ("save.txt" >> tempVar)
+	double tempVar;
+	while (myfile >> tempVar)
 	{
-		randomVector.push_back(tempVar);
+		newVector.push_back(tempVar);
 	}
-	if (myfile.is_open)
+	if (myfile.is_open())
 	{
 		cout << "save file is found";
 		cout << "\n ";
-		cout << tempVar
+		cout << tempVar;
 	}
-	else 
+	else
 	{
 		cout << "save file not found";
 	}
