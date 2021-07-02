@@ -1,4 +1,5 @@
 #include <iostream>
+#include <istream>
 #include <string>
 #include <Windows.h>
 #include <stdlib.h>
@@ -50,7 +51,7 @@ void Save() {
 	ofstream namefile("namesave.txt");
 	if (namefile.is_open()) {
 		cout << "namesave file is open";
-		namefile << playername;
+		namefile << playername << endl;
 		namefile.close();
 	}
 	else {
@@ -59,7 +60,7 @@ void Save() {
 	ofstream genderfile("gendersave.txt");
 	if (genderfile.is_open()) {
 		cout << "gendersave file is open";
-		genderfile << gender;
+		genderfile << gender << endl;
 		namefile.close();
 	}
 }
@@ -121,18 +122,21 @@ void Load() {
 		cout << "save file not found";
 	}
 	myfile.close();
+	vector<string> newVector2;
 	ifstream namefile("namesave.txt");
+	string name;
 	if (namefile.is_open()) {
-		while (getline(myfile, player)) {
-			istreambuf_iterator<char>(namefile);
-			cout << player;
+		cout << "Namesave works"; {
+		for (int i = 0; i < 25; i++)
+			newVector2.push_back(name);
+		cout << name;
 		}
 		namefile.close();
 	}
 
 	levelud = newVector[0];
 	levellr = newVector[1];
-	playername = player;
+	playername = newVector2[0];
 	gender = gendername;
 
 }
