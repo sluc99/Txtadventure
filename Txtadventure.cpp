@@ -21,6 +21,7 @@ string exitsave;						// making save on exit
 string player;							// playername in save file
 string gender;							// gender save
 string gendername;						// gendername in save file
+
 void slowSentence(string sentence) {
 	for (int i = 0; i < sentence.length(); i++) {
 		std::cout << sentence[i];
@@ -34,11 +35,21 @@ void Credits() {
 	slowSentence(playername);
 	//slowSentence(credits2);
 }
+void NameSave() {
+	ofstream namefile("namesave.txt");
+	if (namefile.is_open()) {
+		cout << "namesave file is open";
+		namefile << playername << endl;
+		namefile.close();
+	}
+	else {
+		cout << "namesave file not fount";
+	}
+}
 
-
-void Save() {
+void PositionSave() {
 	vector<double> a = { levelud, levellr };
-	ofstream myfile ("save.txt");
+	ofstream myfile("save.txt");
 	if (myfile.is_open()) {
 		cout << "save file is open";
 		ostream_iterator<double> output_iterator(myfile, "\n");
@@ -48,21 +59,22 @@ void Save() {
 	else {
 		cout << "save file not found";
 	}
-	ofstream namefile("namesave.txt");
-	if (namefile.is_open()) {
-		cout << "namesave file is open";
-		namefile << playername << endl;
-		namefile.close();
-	}
-	else {
-		cout << "file not found";
-	}
+}
+
+void GenderSave() {
 	ofstream genderfile("gendersave.txt");
 	if (genderfile.is_open()) {
 		cout << "gendersave file is open";
 		genderfile << gender << endl;
-		namefile.close();
+		genderfile.close();
 	}
+}
+
+
+void MainSave() {
+	PositionSave();
+	NameSave();
+	GenderSave();
 }
 
 void Exit() {
@@ -70,7 +82,7 @@ void Exit() {
 	cin >> exitsave;
 	if (exitsave == "y" || exitsave == "Y" || exitsave == "Yes" || exitsave == "yes") {
 		slowSentence(saving);
-		Save();
+		MainSave();
 		slowSentence(exitgame);
 		exit (0);
 	}
@@ -94,13 +106,37 @@ void MoveDirection() {
 		levellr -= 1;
 	}
 	if (direction == "save" || direction == "Save") {
-		Save();
+		MainSave();
 	}
 	if (direction == "Exit" || direction == "exit") {
 		Exit();
 	}
 }
-void Load() {
+void NameLoad() {
+	string Name;
+	ifstream namefile("namesave.txt");
+	if (namefile.is_open()) {
+		while (getline(namefile, Name)) {
+			playername = Name;
+		}
+		namefile.close();
+	}
+	else {
+		cout << "file not found";
+	}
+}
+
+void GenderLoad() {
+	string Gender;
+	ifstream genderfile("gendersave.txt");
+	if (genderfile.is_open()) {
+		while (getline(genderfile, Gender)) {
+			gender = Gender;
+		}
+	}
+}
+
+void PositionLoad() {
 	vector<double> newVector;
 	ifstream myfile("save.txt");
 	double tempVar;
@@ -108,37 +144,24 @@ void Load() {
 	{
 		newVector.push_back(tempVar);
 	}
-	if (myfile.is_open())
-	{
-		cout << "save file is found";
-		cout << "\n ";
+	if (myfile.is_open()){
 		if (newVector.size() > 1) {
-			cout << newVector[0] << endl << newVector[1] << endl;
 		}
 		myfile.close();
+		levelud = newVector[0];
+		levellr = newVector[1];
 	}
 	else
 	{
 		cout << "save file not found";
 	}
-	myfile.close();
-	vector<string> newVector2;
-	ifstream namefile("namesave.txt");
-	string name;
-	if (namefile.is_open()) {
-		cout << "Namesave works"; {
-		for (int i = 0; i < 25; i++)
-			newVector2.push_back(name);
-		cout << name;
-		}
-		namefile.close();
-	}
+	myfile.close();	
+}
 
-	levelud = newVector[0];
-	levellr = newVector[1];
-	playername = newVector2[0];
-	gender = gendername;
-
+void MainLoad() {
+	PositionLoad();
+	NameLoad();
+	GenderLoad();
 }
 
 int main() {
@@ -162,12 +185,13 @@ int main() {
 	string introvillage2 = ". Weird i remember that name vaguely, like i have heard it before. Anyway what does a adventurer like you do in Starter village. I bet you want to meet the mayor luckily he is not busy right now. I'll lead you to him.\nShe starts to walk towards the North.";
 	string introvillage3 = "You follow Alisha to the north. After a moment you see a big building with marble pillars. She leads you inside into a office. Inside the office sits a man with a curly mustache. As you look at him you see he is about 1.8m you also see his mustache is getting a little white. As he sits there you hear Alisha say that you are a new adventurer. ";
 	string introvillage4 = "A new adventurer you say. Perfect we are in need of help. But before i sent you off i want to see what you are capable off";
+	string introvillage5;
 	// Welcoming sequence with character selection
 
 	slowSentence(welcome);
 	cin >> playername;
 	if (playername == "Load" || playername == "load" || playername == "L" || playername == "l") {
-		Load();
+		MainLoad();
 		cout << "Welcome back " << playername;
 	}
 	int i_levelud = levelud;
