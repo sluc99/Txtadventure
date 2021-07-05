@@ -8,18 +8,34 @@ using namespace std;
 
 string items;
 string inventory;
+string itemcheck;
+string choiceinventory;			// Inventory choice save
 
 void Inventory() {
 	ifstream myfile("items.txt");
 
 	if (myfile.is_open()) {
 		while (getline(myfile, inventory)) {
-			cout << inventory << '\n';
+			cout << inventory << endl;
 		}
 		myfile.close();
 	}
-	else cout << "Unable to open file";
+	else {
+		cout << "Unable to open file";
+	}
+}
+void UseItem() {
+	ifstream myfile("items.txt");
 
+	if (myfile.is_open()) {
+		while (getline(myfile, itemcheck)) {
+			cout << endl;
+		}
+		myfile.close();
+	}
+	else {
+		cout << "Unable to open file";
+	}
 }
 
 int main()
@@ -34,7 +50,6 @@ int main()
 	int fleechance;					// Fleechance save
 	int fleeattempts = 0;			// Modifier for fleeing
 	string choiceplayer;			// Choice save for the player
-	string choiceinventory;			// Inventory choice save
 
 	cout << "Battle time\n";
 
@@ -56,6 +71,9 @@ int main()
 			if (dodgechance >= 85) {
 				cout << " You will dodge the next attack \n";
 				dodge == 1;
+			}
+			else {
+				cout << " You failed to dodge \n";
 			}
 		}
 		if (choiceplayer == "Flee" || choiceplayer == "flee" || choiceplayer == "F" || choiceplayer == "f") {

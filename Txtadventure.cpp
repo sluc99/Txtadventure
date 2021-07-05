@@ -10,6 +10,10 @@ using namespace std;
 
 float levelud = 0;
 float levellr = 0;
+int playerlevel = 1;
+int hp = 20;
+int exp = 0;
+int levelexp = 0;
 string direction;
 string exitgame = "The game will exit. Goodbye";
 string credits = "Thanks for playing the game ";
@@ -27,6 +31,10 @@ void slowSentence(string sentence) {
 		std::cout << sentence[i];
 		Sleep(1);
 	}
+}
+
+void HpLevel() {
+	
 }
 
 void Credits() {
