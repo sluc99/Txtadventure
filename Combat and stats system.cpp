@@ -8,8 +8,10 @@ using namespace std;
 
 string items;
 string inventory;
-string itemcheck;
+string itemcheck;				// Checks if item that is being used is in inventory
 string choiceinventory;			// Inventory choice save
+
+// array for inventory
 
 void Inventory() {
 	ifstream myfile("items.txt");
@@ -53,7 +55,7 @@ int main()
 
 	cout << "Battle time\n";
 
-	for (int i = 0; i < 100; i++) {
+	while (int battlei == true) {
 		srand(time(NULL));
 		cout << "Your enemy has " << hpe << "amount of hitpoints left\n";
 		cout << "You have " << hpy << "amount of hitpoints left\n";
@@ -106,6 +108,7 @@ int main()
 
 		if (hpe <= 0) {
 			cout << "The enemy is dead\n";
+			exp + (4 * levelmodifier)
 			break;
 		}
 		if (turn == 1) {
